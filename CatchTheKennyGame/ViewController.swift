@@ -15,6 +15,7 @@ class ViewController: UIViewController {
     var counter = 0
     var kennyArray = [UIImageView]()
     var hideTimer = Timer()
+    var highScore = 0
     
     // Views
     @IBOutlet weak var timeLabel: UILabel!
@@ -72,6 +73,21 @@ class ViewController: UIViewController {
         // Timers and Scores
         
         scoreLabel.text = "Score : \(score)"
+        
+        // Highscore check
+        
+        let storedHighScore = UserDefaults.standard.object(forKey: "highscore")
+        
+        if storedHighScore == nil {
+            
+            highScore = 0
+            highScoreLabel.text = "Highscore : \(highScore)"
+        }
+        
+        if let newScore = storedHighScore as? Int {
+            highScore = newScore
+            highScoreLabel.text = "Highscore : \(highScore)"
+        }
 
         counter = 10
         timeLabel.text = "\(counter)"
@@ -109,6 +125,14 @@ class ViewController: UIViewController {
         if counter == 0 {
             timer.invalidate()
             hideTimer.invalidate()
+            
+            // Highscore
+            
+            if score > highScore {
+                highScore = score
+                highScoreLabel.text = "Highscore : \(highScore)"
+                UserDefaults.standard.set(highScore, forKey: "highscore")
+            }
             
             // Alert
             

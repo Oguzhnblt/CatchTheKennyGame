@@ -13,6 +13,8 @@ class ViewController: UIViewController {
     var score = 0
     var timer = Timer()
     var counter = 0
+    var kennyArray = [UIImageView]()
+    var hideTimer = Timer()
     
     // Views
     @IBOutlet weak var timeLabel: UILabel!
@@ -43,6 +45,10 @@ class ViewController: UIViewController {
         kenny8.isUserInteractionEnabled = true
         kenny9.isUserInteractionEnabled = true
         
+        // Kenny Array
+        kennyArray = [kenny1, kenny2, kenny3, kenny4, kenny5, kenny6, kenny7, kenny8, kenny9]
+        
+        
         let recognizer1 = UITapGestureRecognizer(target: self, action: #selector(increaseScore))
         let recognizer2 = UITapGestureRecognizer(target: self, action: #selector(increaseScore))
         let recognizer3 = UITapGestureRecognizer(target: self, action: #selector(increaseScore))
@@ -52,7 +58,7 @@ class ViewController: UIViewController {
         let recognizer7 = UITapGestureRecognizer(target: self, action: #selector(increaseScore))
         let recognizer8 = UITapGestureRecognizer(target: self, action: #selector(increaseScore))
         let recognizer9 = UITapGestureRecognizer(target: self, action: #selector(increaseScore))
-        
+        // Gestures
         kenny1.addGestureRecognizer(recognizer1)
         kenny2.addGestureRecognizer(recognizer2)
         kenny3.addGestureRecognizer(recognizer3)
@@ -71,6 +77,21 @@ class ViewController: UIViewController {
         timeLabel.text = "\(counter)"
         
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(countDown), userInfo: nil, repeats: true)
+        hideTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(hideKenny), userInfo: nil, repeats: true)
+        //
+        
+        
+        hideKenny()
+    }
+    
+   @objc func hideKenny () {
+       
+        for kenny in kennyArray {
+            kenny.isHidden = true
+        }
+        
+        let random = Int( arc4random_uniform(UInt32(kennyArray.count - 1)))
+        kennyArray[random].isHidden = false
     }
     
     @objc func increaseScore() {
@@ -87,6 +108,7 @@ class ViewController: UIViewController {
         
         if counter == 0 {
             timer.invalidate()
+            hideTimer.invalidate()
             
             // Alert
             
